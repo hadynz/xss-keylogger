@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>XSS Vulnerable</title>
+
+    <script src="/snoop.js"></script>
+</head>
+<body>
+    <h1>Innocent XSS vulnerable page</h1>
+
+    <form>
+
+        <input class="search" type="text" />
+
+        <label for="name">Name</label>
+        <input id="name" type="text" />
+        <br />
+
+        <label for="age">Age</label>
+        <input id="age" type="text" />
+        <br />
+
+        <label for="bio">Bio</label>
+        <textarea id="bio" rows="5" cols="35"></textarea>
+        <br />
+
+    </form>
+
+</body>
+</html>

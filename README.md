@@ -2,6 +2,9 @@
 A simple keystroke logger that listens and sends all keystrokes for a user on a Cross-site scripting (XSS) vulnerable 
 page to a remote dashboard page via [websockets][1].
 
+## Demo
+![](https://cloud.githubusercontent.com/assets/315585/4782509/1aafaf46-5cf8-11e4-87c6-a698c7c47deb.gif)
+
 ## Introduction
 The XSS Keylogger project comes with a Node server and a client side script. The client side script is typically
 injected in a web page viewed by other users. The client side script connects using a persistent websocket

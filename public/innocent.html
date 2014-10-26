@@ -3,28 +3,40 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>XSS Vulnerable</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font: 13px Helvetica, Arial; }
+        h1 { margin-bottom: 20px; }
+        label, input, textarea { float: left; font-size: 16px; }
+        label { width: 70px; }
+        .form-group { display: block; clear: both; overflow: auto; margin-bottom: 20px; }
+
+    </style>
 
     <script src="/snoop.js"></script>
 </head>
 <body>
-    <h1>Innocent XSS vulnerable page</h1>
+    <h1>XSS vulnerable page with xss-keylogger installed</h1>
 
     <form>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input id="name" type="text" />
+        </div>
 
-        <input class="search" type="text" />
+        <div class="form-group">
+            <label for="age">Age</label>
+            <input id="age" type="text" />
+        </div>
 
-        <label for="name">Name</label>
-        <input id="name" type="text" />
-        <br />
+        <div class="form-group">
+            <label for="bio">Bio</label>
+            <textarea id="bio" rows="5" cols="35"></textarea>
+        </div>
 
-        <label for="age">Age</label>
-        <input id="age" type="text" />
-        <br />
-
-        <label for="bio">Bio</label>
-        <textarea id="bio" rows="5" cols="35"></textarea>
-        <br />
-
+        <div class="form-group">
+            <input type="button" value="Submit" />
+        </div>
     </form>
 
 </body>

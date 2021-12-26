@@ -20,7 +20,7 @@
     </div>
     <div class="col">
         <h1>Embed Remote JavaScript</h1>
-        <textarea id="console" placeholder="Enter JavaScript to run against all remote clients"></textarea>
+        <textarea id="textArea" placeholder="Enter JavaScript to run against all remote clients"></textarea>
         <button id="sendJS">Remote Embed</button>
     </div>
 </body>
@@ -29,7 +29,7 @@
 
 <script>
     var messages = document.getElementById('messages'),
-        console = document.getElementById('console'),
+        textArea = document.getElementById('textArea'),
         remoteJsButton = document.getElementById('sendJS'),
         chat = {
             newLineInitialised: false,
@@ -45,7 +45,7 @@
                 switch(keyCode) {
                     // Del key
                     case 8:
-                        console.log('lastLine.innerText', lastLine.innerText);
+                        textArea.log('lastLine.innerText', lastLine.innerText);
                         lastLine.innerText = lastLine.innerText.slice(0, -1);
 
                         this.newLineInitialised = false;
@@ -101,9 +101,9 @@
     });
 
     remoteJsButton.onclick = function() {
-        if (console.value !== '') {
-            socket.emit('remoteJs', console.value);
-            console.value = '';
+        if (textArea.value !== '') {
+            socket.emit('remoteJs', textArea.value);
+            textArea.value = '';
         }
         return false;
     };
